@@ -1,0 +1,1126 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Roadshow Shot List</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: a call sheet for the road. Sticky date strip on top, then one ~760px column per day:
+   heading, schedule and questions side by side from 720px, shots grouped by place, tonight's offload. */
+:root {
+  --bg: #EDF1F5; --surface: #FFFFFF; --sunk: #E3E9EF; --ink: #0B2132; --muted: #53677A; --line: #D2DBE3;
+  --accent: #0E3957; --accent-ink: #FFFFFF;
+  --hi: #EAB728; --hi-ink: #2B2000; --hi-soft: #FBF0CC;
+  --dji: #0E3957; --dji-ink: #FFFFFF;
+  --ok: #1D7549; --ok-soft: #DCF0E5; --warn: #9A5600; --warn-soft: #FBE8CF;
+  --opt: #5C6C7B; --opt-soft: #E5EAEF; --priv: #962B5E; --priv-soft: #F5DEE9; --spon: #17657F; --spon-soft: #D9EDF5;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #071725; --surface: #0E2335; --sunk: #0A1C2C; --ink: #E5ECF2; --muted: #92A6B7; --line: #1F3B53;
+    --accent: #EAB728; --accent-ink: #1A1400;
+    --hi: #EAB728; --hi-ink: #1A1400; --hi-soft: #382E0E;
+    --dji: #2C6690; --dji-ink: #FFFFFF;
+    --ok: #5FCB91; --ok-soft: #12382A; --warn: #F2A64E; --warn-soft: #3A2911;
+    --opt: #98A9B8; --opt-soft: #182D3F; --priv: #EB86B5; --priv-soft: #3A172A; --spon: #6FC5E7; --spon-soft: #0F3249;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #071725; --surface: #0E2335; --sunk: #0A1C2C; --ink: #E5ECF2; --muted: #92A6B7; --line: #1F3B53;
+  --accent: #EAB728; --accent-ink: #1A1400;
+  --hi: #EAB728; --hi-ink: #1A1400; --hi-soft: #382E0E;
+  --dji: #2C6690; --dji-ink: #FFFFFF;
+  --ok: #5FCB91; --ok-soft: #12382A; --warn: #F2A64E; --warn-soft: #3A2911;
+  --opt: #98A9B8; --opt-soft: #182D3F; --priv: #EB86B5; --priv-soft: #3A172A; --spon: #6FC5E7; --spon-soft: #0F3249;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--hi); outline-offset: 2px; }
+.wrap { max-width: 780px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top-row { display: flex; align-items: center; gap: 10px; padding-block: 10px 6px; }
+.mark { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.mark b { background: var(--hi); color: var(--hi-ink); padding: 0 6px; border-radius: 3px; }
+.mark span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-row .spacer { flex: 1; }
+.pill-sync { font-family: var(--f-mono); font-size: .72rem; padding: 3px 8px; border-radius: 99px; background: var(--opt-soft); color: var(--opt); white-space: nowrap; }
+.pill-sync[data-state="shared"] { background: var(--ok-soft); color: var(--ok); }
+.btn-ghost { border: 1px solid var(--line); background: transparent; border-radius: 8px; padding: 5px 10px; font-size: .85rem; cursor: pointer; white-space: nowrap; }
+.btn-ghost[aria-expanded="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+.strip-scroll { overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+.strip-scroll::-webkit-scrollbar { display: none; }
+.strip { display: flex; gap: 6px; padding-block: 4px 10px; width: max-content; }
+.chip-day { scroll-snap-align: center; width: 58px; flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 5px 0 6px; cursor: pointer; display: grid; justify-items: center; gap: 1px; position: relative; }
+.chip-day .dow { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.chip-day .dn { font-family: var(--f-display); font-weight: 700; font-size: 1.45rem; line-height: 1; }
+.chip-day .city { font-family: var(--f-mono); font-size: .6rem; color: var(--muted); letter-spacing: .02em; }
+.chip-day .bar { width: 36px; height: 3px; border-radius: 2px; background: var(--sunk); overflow: hidden; margin-top: 3px; }
+.chip-day .bar i { display: block; height: 100%; background: var(--ok); }
+.chip-day[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip-day[aria-current="true"] .dow, .chip-day[aria-current="true"] .city { color: var(--accent-ink); opacity: .85; }
+.chip-day.is-today::after { content: ""; position: absolute; top: 4px; right: 5px; width: 7px; height: 7px; border-radius: 50%; background: var(--hi); }
+.chip-day.month-start { margin-left: 10px; }
+
+/* Rules panel */
+.rules { background: var(--sunk); border-bottom: 1px solid var(--line); }
+.rules .wrap { padding-block: 16px 20px; display: grid; gap: 14px; }
+.rules h2 { margin: 0; }
+.rules-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.rules-grid div { min-width: 0; }
+.rules h3 { font-family: var(--f-display); font-size: 1rem; letter-spacing: .05em; text-transform: uppercase; margin: 0 0 4px; }
+.rules ul { margin: 0; padding-left: 18px; font-size: .93rem; }
+.rules li + li { margin-top: 3px; }
+
+/* Day heading */
+main .wrap { padding-block: 22px 40px; display: grid; gap: 26px; }
+.banner { background: var(--hi-soft); border: 1px solid var(--hi); border-radius: 10px; padding: 10px 14px; font-size: .95rem; }
+.day-head { display: grid; gap: 8px; }
+.eyebrow { font-family: var(--f-mono); font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.eyebrow .lane { color: var(--spon); }
+.title-row { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(2.1rem, 7vw, 3rem); line-height: .95; margin: 0; text-wrap: balance; letter-spacing: .005em; }
+.today-tag { font-family: var(--f-mono); font-size: .72rem; background: var(--hi); color: var(--hi-ink); padding: 3px 8px; border-radius: 4px; margin-bottom: 4px; }
+.day-title { font-family: var(--f-display); font-weight: 600; font-size: 1.35rem; margin: 0; color: var(--accent); }
+.day-note { margin: 0; color: var(--muted); max-width: 62ch; }
+.progress { display: grid; gap: 6px; margin-top: 4px; }
+.progress-track { height: 8px; border-radius: 4px; background: var(--sunk); overflow: hidden; }
+.progress-track i { display: block; height: 100%; background: var(--ok); transition: width .25s ease; }
+.progress-text { font-size: .9rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.progress-text b { color: var(--ink); }
+.daynav { display: flex; gap: 8px; }
+.daynav button { flex: 1; text-align: left; }
+.daynav button:last-child { text-align: right; }
+.daynav button:disabled { visibility: hidden; }
+
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; letter-spacing: .07em; text-transform: uppercase; margin: 0 0 10px; display: flex; align-items: baseline; gap: 8px; }
+h2 small { font-family: var(--f-body); font-weight: 400; font-size: .85rem; letter-spacing: 0; text-transform: none; color: var(--muted); }
+
+.two-col { display: grid; gap: 26px; }
+@media (min-width: 720px) { .two-col { grid-template-columns: 1.1fr 1fr; } }
+.two-col > * { min-width: 0; }
+
+/* Schedule */
+.sched { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.sched li { display: grid; grid-template-columns: 5.6rem 1fr; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.sched .t { font-family: var(--f-mono); font-size: .8rem; color: var(--muted); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.sched .w { min-width: 0; }
+.sched .w p { margin: 0; }
+.sched .sub { font-size: .85rem; color: var(--muted); margin-top: 2px !important; }
+.status { display: inline-block; font-family: var(--f-mono); font-size: .66rem; letter-spacing: .05em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; margin-left: 6px; vertical-align: 2px; white-space: nowrap; border: 1px solid transparent; }
+.st-ok { background: var(--ok-soft); color: var(--ok); }
+.st-hi { background: var(--hi-soft); color: var(--ink); border-color: var(--hi); }
+.st-plain { border-color: var(--line); color: var(--muted); }
+.st-warn { background: var(--warn-soft); color: var(--warn); }
+.st-opt { border: 1px dashed var(--opt); color: var(--opt); }
+.st-priv { background: var(--priv-soft); color: var(--priv); }
+.st-spon { background: var(--spon-soft); color: var(--spon); }
+
+/* Questions */
+.asks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.asks li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.asks .k { font-family: var(--f-mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+.asks q { font-size: 1rem; }
+
+.watch { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 66ch; }
+.watch li::marker { color: var(--warn); }
+
+/* Filters */
+.filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: transparent; padding: 7px 13px; cursor: pointer; font-size: .9rem; border-right: 1px solid var(--line); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.switch { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; cursor: pointer; }
+.switch input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+/* Shots */
+.block + .block { margin-top: 22px; }
+.block h3 { font-family: var(--f-display); font-weight: 600; font-size: 1.2rem; margin: 0 0 8px; display: flex; align-items: baseline; gap: 8px; }
+.block h3 .n { font-family: var(--f-mono); font-size: .75rem; font-weight: 500; color: var(--muted); }
+.shots { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.shot { display: grid; grid-template-columns: 44px 1fr; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.shot.is-done .shot-body { opacity: .5; }
+.tick { width: 44px; height: 44px; border-radius: 10px; border: 2px solid var(--line); background: var(--bg); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.tick svg { width: 22px; height: 22px; stroke: var(--accent-ink); stroke-width: 3; fill: none; opacity: 0; }
+.tick[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); }
+.tick[aria-pressed="true"] svg { opacity: 1; stroke: var(--surface); }
+.tick:disabled { cursor: default; opacity: .6; }
+.shot-body { min-width: 0; display: grid; gap: 5px; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.code { font-family: var(--f-mono); font-weight: 600; font-size: .9rem; }
+.code.lbl { font-weight: 500; color: var(--muted); }
+.cam { font-family: var(--f-mono); font-size: .68rem; font-weight: 600; letter-spacing: .04em; padding: 2px 7px; border-radius: 4px; border: 1px solid transparent; }
+.cam-DJI { background: var(--dji); color: var(--dji-ink); }
+.cam-iPhone { border-color: var(--ink); color: var(--ink); }
+.cam-Both { background: var(--hi); color: var(--hi-ink); }
+.frame { font-size: .85rem; color: var(--muted); }
+.tag { font-family: var(--f-mono); font-size: .64rem; letter-spacing: .05em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; }
+.tag-key { background: var(--hi); color: var(--hi-ink); }
+.tag-opt { border: 1px dashed var(--opt); color: var(--opt); }
+.tag-cond { background: var(--warn-soft); color: var(--warn); }
+.tag-priv { background: var(--priv-soft); color: var(--priv); }
+.tag-adobe { background: var(--spon-soft); color: var(--spon); }
+.shot-text { margin: 0; }
+.also { font-size: .82rem; color: var(--muted); margin: 0; }
+.line { margin: 2px 0 0; background: var(--sunk); border-radius: 8px; padding: 8px 10px; font-size: .97rem; }
+.line .k { font-family: var(--f-mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-right: 8px; }
+.empty { color: var(--muted); font-style: italic; margin: 0; }
+
+/* Offload */
+.offload { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 10px; }
+.offload p { margin: 0; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; font-size: .93rem; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.mono { font-family: var(--f-mono); font-size: .85rem; }
+.path { display: block; overflow-x: auto; white-space: nowrap; background: var(--sunk); border-radius: 6px; padding: 6px 8px; }
+.callout { font-size: .9rem; border-radius: 8px; padding: 8px 10px; }
+.callout.priv { background: var(--priv-soft); color: var(--ink); }
+.callout.spon { background: var(--spon-soft); color: var(--ink); }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 18px 28px; font-size: .85rem; color: var(--muted); display: grid; gap: 6px; }
+footer p { margin: 0; max-width: 70ch; }
+
+.toast { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 10px; font-size: .9rem; max-width: calc(100% - 32px); z-index: 20; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="mark"><b>WTT</b><span>US Roadshow 2026</span></div>
+      <div class="spacer"></div>
+      <span class="pill-sync" id="sync" data-state="local">Saved on this phone</span>
+      <button class="btn-ghost" id="rules-btn" aria-expanded="false" aria-controls="rules">Field rules</button>
+    </div>
+    <div class="strip-scroll" id="strip-scroll"><div class="strip" id="strip" role="group" aria-label="Shoot days"></div></div>
+  </div>
+</header>
+
+<section class="rules" id="rules" hidden>
+  <div class="wrap">
+    <h2>Field rules <small>every day, every city</small></h2>
+    <div class="rules-grid">
+      <div><h3>Cameras</h3><ul>
+        <li><b>DJI</b>: the horizontal master. Establishing shots, controlled walking, stable two-host conversations, interviews.</li>
+        <li><b>iPhone</b>: candid reactions, close details, passenger-window views, vertical clips, backup.</li>
+        <li><b>Both</b>: DJI horizontal master first, then a short iPhone vertical only if it’s worth it and there’s time. Never make a guest repeat an answer.</li>
+      </ul></div>
+      <div><h3>At every stop</h3><ul>
+        <li>One wide, one medium action, one close detail, and an honest reaction if there is one.</li>
+        <li>Hold each shot steady for about 5 seconds. Leave room at the start and end.</li>
+        <li>Morning prompt: “What are we looking forward to?” Evening prompt: “What surprised us?”</li>
+      </ul></div>
+      <div><h3>Sound</h3><ul>
+        <li>Mic every conversation and check the levels.</li>
+        <li>Leave 2 seconds of silence before and after each answer.</li>
+        <li>Record about 10 seconds of clean ambient sound at each location, where allowed.</li>
+      </ul></div>
+      <div><h3>Never film</h3><ul>
+        <li>Passports, boarding passes, QR codes, barcodes, room numbers or private itinerary screens.</li>
+        <li>Security or restricted areas, or strangers close up without permission.</li>
+        <li>Anything from the driver’s seat. Roadside shots only from safe, legal stops.</li>
+      </ul></div>
+      <div><h3>What comes first</h3><ul>
+        <li>Travel, rest, booked activities, safety and consent beat coverage.</li>
+        <li>Never present a pending or optional plan as something that happened.</li>
+        <li>Capture a lot. Publish selectively. Bank the rest.</li>
+      </ul></div>
+      <div><h3>Every night</h3><ul>
+        <li>Charge the DJI, phones and mic batteries. Clear storage.</li>
+        <li>Offload, then back up to two separate places and check the copies before wiping a card.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<main id="main"><div class="wrap" id="day"></div></main>
+
+<footer>
+  <div class="wrap">
+    <p>Built from the job’s storyboard (revision sb007) and the source filming storyboard’s shot list, including the 22 October music &amp; sport addendum and itinerary audit. Booking statuses are as the source reports them and haven’t been checked against tickets. Check times on the day.</p>
+    <p>Codes such as <span class="mono">LA05</span> come from the source shot list. Lowercase labels such as <span class="mono">atl-3</span> mark shots the source lists without a code. A letter suffix such as <span class="mono">LA16a</span> splits a source shot using the addendum.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------- Data ----------
+  const S = (c, cam, f, d, t, o = {}) => ({ c, cam, f, d, t, ask: o.ask, say: o.say, also: o.also, g: (o.g || "").split(" ").filter(Boolean), lbl: /^[a-z]/.test(c) });
+  const R = (t, w, s, sub) => ({ t, w, s, sub });
+  const B = (name, shots) => ({ name, shots });
+
+  const CH = {
+    CH01: "Sydney → Los Angeles", CH02: "Los Angeles", CH03: "Houston / AFROTECH", CH04: "Atlanta", CH05: "New York",
+    CH06: "Washington DC", CH07: "Miami", CH08: "San Francisco", CH09: "California coast", ADOBE: "Adobe MAX · sponsored lane"
+  };
+
+  const DAYS = [
+    {
+      date: "2026-10-29", city: "SYD", ch: ["CH01"], title: "Packing day", route: "Home, Sydney",
+      note: "Packing can also be filmed on the morning of 30 October, before you leave.",
+      tz: "Sydney +11:00", sessions: ["ch01-sydney-to-la"],
+      sched: [R("Any time", "Pack at home: 5–10 minutes of filming", "planned")],
+      blocks: [
+        B("Home · packing", [
+          S("01", "DJI", "Wide · tripod", "5 s", "Equipment, luggage and both hosts in frame. Hold 5 seconds before and after the action."),
+          S("02", "iPhone", "Close · top-down", "5 s each", "DJI, microphone, spare batteries, charging cable; hands packing the bag."),
+          S("03", "DJI", "Medium · eye level", "5 s", "Putting on the WTT hoodie or jacket."),
+          S("04", "iPhone", "Over the shoulder", "5 s", "Reviewing the itinerary on a phone. Hide personal details."),
+          S("05", "iPhone", "Close", "5 s each", "Zip the suitcase, lift the bag, shut the door."),
+          S("06", "DJI", "Medium · eye level · mic", "15–20 s", "René introduces the trip. One natural take first; repeat only if the audio fails.", { say: "We’ve spent the last couple of years building What The Tech in Australia. Now we’re taking it on the road. We’re heading to the US to meet people, explore the tech ecosystem and bring back some great stories.", g: "key" })
+        ])
+      ],
+      watch: ["Keep passports, boarding-pass QR codes and private itinerary screens out of frame.", "Natural beats perfect: don’t chase exact wording."]
+    },
+    {
+      date: "2026-10-30", city: "SYD·LA", ch: ["CH01", "CH02"], title: "Fly out, land in LA, Getty", route: "Sydney → LAX → Getty Center → Koreatown",
+      note: "One calendar date on both sides of the Pacific: you leave Sydney in the morning and land at LAX at 6:05 am the same day. Arrival is for rest, not a full production day.",
+      tz: "Sydney +11:00 until departure, then LA -07:00", sessions: ["ch01-sydney-to-la", "ch02-getty", "ch02-koreatown"],
+      sched: [
+        R("Morning", "Flight leaves Sydney", "booked", "Exact time not recorded yet: check the ticket."),
+        R("6:05 am", "Land at LAX (LA time)", "booked"),
+        R("Morning", "Hotel bag drop and recovery first", "planned"),
+        R("Flexible", "Burke Williams spa", "pending"),
+        R("3:00 pm", "Getty Center timed entry", "booked"),
+        R("Evening", "Koreatown dinner", "planned", "Choice of restaurant is flexible.")
+      ],
+      blocks: [
+        B("Leaving home", [
+          S("07", "iPhone", "Low close", "5 s", "Suitcase wheels crossing the doorway."),
+          S("08", "DJI", "Wide · fixed", "5–8 s", "Both hosts leaving home with luggage. Set the camera before the action."),
+          S("09", "iPhone", "Medium", "5 s", "Loading luggage into the transport."),
+          S("10", "iPhone", "Wide · passenger seat", "5 s", "Sydney roads, airport approach, terminal sign. No filming by the driver.", { say: "Sydney to LA. The roadshow starts here." })
+        ]),
+        B("Sydney Airport · check in first", [
+          S("11", "DJI", "Wide", "5–8 s", "International terminal establishing shot."),
+          S("12", "iPhone", "Close", "5 s", "Departures board showing Los Angeles, if visible. Avoid other passengers’ details."),
+          S("13", "iPhone", "Close", "5 s", "Luggage and coffee. No passports or boarding-pass QR codes."),
+          S("14", "DJI", "Medium · walking", "5–8 s", "Moving through the terminal: one of you films, one leads."),
+          S("15", "Both", "Two-shot · eye level · mics", "60–120 s", "The airport conversation, in a quiet spot after security. René asks what Vivienne is most excited about; Vivienne asks what René hopes you’ll discover. Then one prediction each, ideally different. Leave 2 seconds of silence before and after. These predictions are the finale’s callback.", { ask: "Before we go, one prediction. What do you think will surprise us most?", g: "key" })
+        ]),
+        B("Flight", [
+          S("16", "DJI", "Wide", "5 s", "The plane at the gate through the terminal window, where permitted."),
+          S("17", "iPhone", "Close", "5 s", "Window view, clouds, sunrise or a cabin detail with no identifiable passengers."),
+          S("18", "iPhone", "Candid", "short", "A reaction to the long-haul flight. Don’t force an in-flight interview.", { g: "opt" })
+        ]),
+        B("LAX arrival", [
+          S("19", "DJI", "Wide", "5 s", "Recognisable LAX sign or exterior, after immigration and baggage."),
+          S("20", "DJI", "Medium", "5–10 s", "Both hosts with luggage: a real first reaction."),
+          S("21", "iPhone", "Close · passenger seat", "5 s each", "Palm trees, road signs and passing city on the transfer. Pick 2–3 distinctive views.", { also: "Also covers LA01." }),
+          S("22", "Both", "Two-shot · mics", "10–15 s", "The arrival line. Natural wording; acknowledge jet lag if it’s real.", { say: "We made it. Los Angeles, California: the first stop on our US Roadshow. / And we’ve got quite a journey ahead.", g: "key" })
+        ]),
+        B("Bag drop and first breakfast", [
+          S("23", "DJI", "Wide", "5 s", "Hotel exterior or neighbourhood texture, without filming other guests."),
+          S("LA02", "iPhone", "Medium", "5 s", "Bags down, genuine reaction. No staged check-in if you’re exhausted."),
+          S("24", "DJI", "Medium · stable", "10–20 s", "Each host’s first impression.", { ask: "What’s your first impression of LA?" }),
+          S("25", "iPhone", "Close", "5 s", "Coffee, bags, morning light."),
+          S("LA03", "iPhone", "Close + two-shot", "5 s each", "Coffee, the plate and a quick “first meal in America” reaction. Don’t film other diners."),
+          S("LA04", "iPhone", "Exterior", "5 s", "Recovery: a quiet exterior or spa sign, only if permitted. Never inside treatment or changing areas.", { g: "opt" })
+        ]),
+        B("Getty Center · 3 pm", [
+          S("LA05", "DJI", "Wide", "5–8 s", "Arrival: architecture and approach. Hold still for a clean establishing shot."),
+          S("LA06", "DJI", "Wide → medium → close", "5 s each", "Garden, lines, artwork if photography is permitted, the panoramic view. iPhone for close details. Don’t block visitors."),
+          S("LA07", "DJI", "Two-shot", "15–25 s", "A quiet exchange about what stands out.", { ask: "We’ve barely landed and we’re already seeing LA from a completely different angle. What’s stood out so far?" })
+        ]),
+        B("Koreatown evening", [
+          S("LA08", "iPhone", "Wide + close", "5 s each", "Koreatown signage, street atmosphere, food details. Guelaguetza is Oaxacan Mexican, not Korean: don’t present it as Korean food."),
+          S("la-1", "Both", "Selfie or two-shot", "15–20 s", "End-of-day reflection. Let the fatigue be part of the story.", { ask: "What surprised you most about our first day?" })
+        ])
+      ],
+      watch: [
+        "Shot 15 matters most today: record each prediction clearly, on mics, with a full horizontal master.",
+        "Bag drop and rest come first. The Getty and recovery outrank extra filming; early night.",
+        "Never film passports, boarding passes, QR codes or security areas.",
+        "The spa is pending: don’t treat it as booked."
+      ]
+    },
+    {
+      date: "2026-10-31", city: "LA", ch: ["CH02"], title: "Griffith, the beaches and Rare Candy", route: "Griffith Observatory → Santa Monica → Venice → Rare Candy",
+      note: "Halloween. Rare Candy is its own cultural beat, not generic nightlife.",
+      tz: "LA -07:00", sessions: ["ch02-griffith-beaches", "ch02-rare-candy"],
+      sched: [
+        R("Morning", "Diner breakfast", "planned"),
+        R("Morning", "Griffith Observatory, first stop", "priority"),
+        R("Midday", "Santa Monica", "priority"),
+        R("Afternoon", "Venice and Muscle Beach pass-by", "priority"),
+        R("If time", "RIF LA sneaker stop, Little Tokyo", "optional"),
+        R("6–10 pm", "Rare Candy Halloween hip-hop event", "priority", "Arriving 6:30–7:15 pm is fine. The 13 Oct itinerary gives De La Playa Records & Leisure, 110 S Ave 56, Highland Park.")
+      ],
+      blocks: [
+        B("Breakfast", [
+          S("LA09", "iPhone", "Close", "5 s", "Coffee pour, diner plate, exterior sign.", { ask: "What are we excited for today?" })
+        ]),
+        B("Griffith Observatory", [
+          S("LA10", "DJI", "Wide", "5–8 s", "The observatory building and skyline. The Hollywood Sign only if it’s visible from where you are."),
+          S("LA11", "DJI", "Two-shot", "15 s", "A genuine expectation-versus-reality exchange.", { ask: "From Australia, this is one of those places you’ve seen in films. Does it live up to expectations?" })
+        ]),
+        B("Santa Monica and Venice", [
+          S("LA12", "iPhone", "Passenger window", "5 s", "Road, neighbourhood and city on the way west. No filming by the driver."),
+          S("LA13", "DJI", "Wide → close", "5 s each", "Pier or beach establishing view, feet on the boardwalk, ocean texture. Don’t chase every landmark."),
+          S("LA14", "DJI", "Wide + medium", "5 s each", "Boardwalk energy, murals, a quick Muscle Beach pass-by. Respect people’s privacy; no workout scene needed."),
+          S("LA15", "DJI", "Two-shot · walking", "15–20 s", "Keep it playful and unscripted. Mics on if practical.", { ask: "How does this compare with Sydney’s beach culture?" })
+        ]),
+        B("Rare Candy · Halloween", [
+          S("LA16a", "DJI", "Exterior wide", "5–8 s", "Venue signage, street arrival and the queue before entry, where permitted."),
+          S("LA16b", "iPhone", "Vertical candid", "5–10 s", "Anticipation, outfit details, host reactions and the Halloween atmosphere."),
+          S("LA16c", "iPhone", "Discreet venue wide", "3–5 s", "Audience energy, only if filming is allowed. No extended performance or music.", { g: "cond" }),
+          S("LA16d", "iPhone", "Two-shot", "15–25 s", "Straight after the event.", { ask: "What stood out about LA’s hip-hop scene tonight?", g: "key" }),
+          S("LA17", "iPhone", "Audio or selfie", "10–20 s", "End-of-night reflection, only if you have the energy.", { ask: "What was the most unexpected part of LA today?", g: "opt" })
+        ])
+      ],
+      watch: [
+        "Halloween traffic: don’t plan a hotel return before Rare Candy. Eat first.",
+        "Ask before filming performers or identifiable people. The edit doesn’t need performance audio.",
+        "Don’t sacrifice the event arrival for optional shopping."
+      ]
+    },
+    {
+      date: "2026-11-01", city: "LA·HOU", ch: ["CH02", "CH03"], title: "Leave LA, land in Houston", route: "LA → LAX → Houston IAH",
+      note: "US daylight saving ends at 2 am: LA clocks go back one hour.",
+      tz: "LA -08:00 from 2 am, then Houston -06:00", sessions: ["ch02-departure", "ch03-arrival"],
+      sched: [
+        R("2:00 am", "US clocks go back one hour", "note"),
+        R("Morning", "Coffee; Farmers Market or The Grove only if the airport buffer allows", "optional"),
+        R("2:18 pm", "Flight LAX → Houston IAH, lands 7:49 pm", "booked")
+      ],
+      blocks: [
+        B("Last LA morning", [
+          S("LA18", "iPhone", "Close", "5 s", "Morning coffee: one final LA texture."),
+          S("LA19", "DJI", "Two-shot", "10–15 s", "Farewell to LA.", { say: "LA was our warm-up. Next stop Houston, and that’s where the technology roadshow really picks up." }),
+          S("LA20", "DJI", "Wide", "5 s", "Terminal establishing shot and luggage. Avoid security areas, boarding passes and passenger details."),
+          S("LA21", "iPhone", "Window", "5 s", "Plane transition. The editor can use a map card instead.", { g: "opt" })
+        ]),
+        B("Houston arrival", [
+          S("H01", "iPhone", "Window", "5 s", "Plane window, first glimpse of Houston. No passenger close-ups."),
+          S("H02", "DJI", "Wide", "5 s", "Hotel exterior or skyline, only if convenient and safe.", { g: "opt" }),
+          S("H03", "iPhone", "Selfie", "10–15 s", "A quick, honest check-in. No elaborate night filming.", { say: "We made it to Houston. Tomorrow: NASA." }),
+          S("H04", "iPhone", "Close", "5 s", "Hotel key or luggage detail. Don’t show the room number.")
+        ])
+      ],
+      watch: ["Protect the airport transfer and check-in.", "No pressure to shoot after a long travel day: rest comes first.", "Hide boarding passes and room numbers."]
+    },
+    {
+      date: "2026-11-02", city: "HOU", ch: ["CH03"], title: "NASA and the Rockets", route: "Space Center Houston → Rockets game",
+      note: "Space supplies scale and ambition; basketball supplies personality. Keep the Rockets beat distinct.",
+      tz: "Houston -06:00", sessions: ["ch03-nasa", "ch03-rockets"],
+      sched: [
+        R("10–10:30 am", "Space Center Houston entry", "planned"),
+        R("11:20 am", "Apollo Mission Control Tram", "booked"),
+        R("Early evening", "POST Houston dinner, only if it doesn’t threaten the game", "optional"),
+        R("Evening", "Houston Rockets game", "booked", "Toyota Center, per the 13 Oct itinerary.")
+      ],
+      blocks: [
+        B("Space Center Houston", [
+          S("H05", "DJI", "Wide", "5–8 s", "Exterior and arrival: the establishing shot."),
+          S("H06", "iPhone", "Close", "5 s", "Ticket or wayfinding sign, without QR codes or personal data."),
+          S("H07", "DJI", "Wide → medium → close", "5 s each", "The exhibits. Respect exhibit and tram filming rules."),
+          S("H08", "Both", "Two-shot", "15–25 s", "DJI horizontal master, optional iPhone vertical excerpt.", { ask: "Seeing the scale of this place, what does it tell you about the ambition behind big technology projects?" }),
+          S("H09", "iPhone", "Detail", "5 s", "Tram queue and approved public displays. Don’t delay the 11:20 am booking or film restricted areas."),
+          S("H10", "DJI", "Medium", "10 s", "Reaction after the tram.", { ask: "What surprised you about how NASA coordinated people and technology?" })
+        ]),
+        B("Dinner", [
+          S("H11", "iPhone", "Detail", "5 s", "POST Houston food or architecture. Skip it if the schedule is tight.", { g: "opt" })
+        ]),
+        B("Rockets game", [
+          S("H12", "DJI", "Exterior wide", "5–8 s", "Arena approach, signage and crowds before entry. Follow the venue’s camera policy."),
+          S("H12a", "iPhone", "Vertical", "5–10 s", "Tickets (codes hidden), jerseys, concourse and pre-tip-off reactions."),
+          S("H13", "iPhone", "Atmosphere", "5–10 s", "Approved atmosphere: seats, scoreboard, crowd, you two cheering. No extended gameplay or broadcast screens."),
+          S("H13a", "iPhone", "Two-shot", "15–25 s", "Straight after the game: first NBA impressions.", { ask: "How does this compare with going to a game at home?", g: "key" }),
+          S("H14", "iPhone", "Selfie", "10–15 s", "End-of-day reflection.", { ask: "From mission control to a basketball arena, what was your Houston highlight?" })
+        ])
+      ],
+      alt: [{ k: "Say", q: "Tomorrow, we go from space innovation to the people building the next generation of tech." }],
+      watch: ["Don’t delay the 11:20 am tram or film restricted areas.", "Drop POST Houston if it threatens tip-off.", "No extended gameplay or broadcast screens: those rights aren’t cleared."]
+    },
+    {
+      date: "2026-11-03", city: "HOU", ch: ["CH03"], title: "AFROTECH Day 1", route: "AFROTECH media day → Texas barbecue",
+      note: "AFROTECH is the chapter’s human and technology heart. Your media pass doesn’t guarantee guests.",
+      tz: "Houston -06:00", sessions: ["ch03-afrotech-day1"],
+      sched: [
+        R("All day", "AFROTECH Day 1, media day", "booked", "Media pass. GRB Convention Center, per the 13 Oct itinerary."),
+        R("—", "Guest conversations and interview slots", "pending"),
+        R("Evening", "Texas barbecue", "priority")
+      ],
+      blocks: [
+        B("Arrival and stand-up", [
+          S("H15", "DJI", "Wide", "5–8 s", "Venue exterior and signage, if filming is permitted."),
+          S("H16", "iPhone", "Close", "5 s", "Registration or lanyard detail. Hide the barcode and private information."),
+          S("H17", "DJI", "Wide", "5 s each", "Event energy: stages, expo floor, community, signage. Follow the organiser’s rules."),
+          S("H18", "Both", "Stand-up", "20–30 s", "DJI main take, iPhone vertical alternate.", { say: "We’ve come from Australia to AFROTECH in Houston to hear directly from the people shaping technology and opportunity." })
+        ]),
+        B("People building technology", [
+          S("H19", "DJI", "Medium · mics", "2–4 min per person", "Consented attendee or guest conversations, only where interviews are allowed. Get name, role, company and on-screen ID first, plus permission to record and publish.", { ask: "What are you working on that excites you?", g: "cond" }),
+          S("H20", "iPhone", "Details", "5 s each", "Notebooks, hands, badges without sensitive data, venue textures; speakers only if allowed."),
+          S("H21", "Both", "Two-shot", "20 s", "Your strongest takeaway of the day.", { say: "One conversation today changed how I think about…" })
+        ]),
+        B("Texas barbecue", [
+          S("H22", "iPhone", "Details", "5 s each", "Ordering, plating, the restaurant exterior and a genuine taste reaction. Don’t make the day only conference footage.")
+        ]),
+        B("Day 1 Reel (9:16)", [
+          S("reel", "iPhone", "Vertical", "15–30 s total", "A hook, 2–3 event textures, one takeaway, then “more from Houston soon.” The tracker targets 6 November, after the event, so it doesn’t need to go out live.", { g: "opt" })
+        ])
+      ],
+      alt: [
+        { k: "Ask a guest", q: "What do you think the tech industry is getting wrong about AI right now?" },
+        { k: "Ask a guest", q: "What should people in Australia learn from this conversation?" },
+        { k: "Ask an attendee", q: "What innovation deserves more attention?" },
+        { k: "Evening", q: "What challenged your assumptions about US tech?" }
+      ],
+      watch: [
+        "No guests is fine: the chapter works as host-led observation. Never imply an interview happened.",
+        "Interview setup: a quiet spot away from PA speakers, DJI on a tripod at eye level, a 10-second mic test, 5 seconds of room tone.",
+        "Hide barcodes on credentials and follow the organiser’s filming rules."
+      ]
+    },
+    {
+      date: "2026-11-04", city: "HOU·ATL", ch: ["CH03", "CH04"], title: "AFROTECH Day 2, fly to Atlanta", route: "AFROTECH → Houston Hobby (HOU) → Atlanta",
+      note: "You arrived at IAH but leave from Hobby (HOU).",
+      tz: "Houston -06:00, then Atlanta -05:00", sessions: ["ch03-afrotech-day2", "ch04-arrival"],
+      sched: [
+        R("Day", "AFROTECH Day 2", "booked"),
+        R("6:40 pm", "Flight from Houston Hobby (HOU) → Atlanta, lands 9:40 pm", "booked")
+      ],
+      blocks: [
+        B("AFROTECH Day 2", [
+          S("H23", "DJI", "Wide", "5 s", "A fresh establishing shot. Don’t repeat Day 1 footage."),
+          S("H24", "DJI", "Medium · mics", "2–4 min", "A short pre-agreed conversation, if a willing guest and the venue rules allow it.", { g: "cond" }),
+          S("H25", "Both", "Two-shot", "20–30 s", "The AFROTECH wrap.", { ask: "After two days at AFROTECH, what’s the one idea you’re taking home?" })
+        ]),
+        B("To Atlanta", [
+          S("H26", "iPhone", "Detail", "5 s", "Packing the equipment, leaving the venue, airport travel."),
+          S("H27", "iPhone", "Window or sign", "10 s", "Airport sign or aircraft window, no private travel details.", { say: "Next stop, Atlanta." }),
+          S("atl-1", "iPhone", "Details", "5 s", "Airport arrival and the night transfer."),
+          S("atl-2", "iPhone", "Selfie", "10 s", "First reaction to Atlanta.")
+        ])
+      ],
+      watch: ["Leave AFROTECH early enough for the 6:40 pm flight from Hobby.", "Don’t trade the flight for one more interview."]
+    },
+    {
+      date: "2026-11-05", city: "ATL", ch: ["CH04"], title: "History, Georgia Tech and the concert", route: "Sweet Auburn & MLK sites → soul food → Georgia Tech → concert",
+      note: "René’s Georgia Tech connection is the centre of this chapter. It’s a personal visit, not a booked university interview.",
+      tz: "Atlanta -05:00", sessions: ["ch04-history", "ch04-georgia-tech", "ch04-atlanta-concert"],
+      sched: [
+        R("Morning", "Sweet Auburn and the MLK historic sites", "planned"),
+        R("Midday", "Southern soul food", "planned"),
+        R("Afternoon", "Georgia Tech, short campus visit", "planned"),
+        R("Evening", "Concert", "booked", "Tickets purchased. The source names Usher / Chris Brown at Mercedes-Benz Stadium: check the billing and venue on the ticket.")
+      ],
+      blocks: [
+        B("Sweet Auburn and MLK sites", [
+          S("atl-3", "DJI", "Wide · static", "5–8 s per wide", "Neighbourhood and historic-site exteriors. Respectful, steady frames."),
+          S("atl-4", "Both", "Two-shot", "20 s", "A short, respectful reflection after the MLK visit.")
+        ]),
+        B("Soul food", [
+          S("atl-5", "iPhone", "Close", "5 s", "Southern soul-food details.")
+        ]),
+        B("Georgia Tech", [
+          S("atl-6", "DJI", "Wide", "5–8 s", "Campus and signage, where permitted. iPhone for sign and architecture details."),
+          S("atl-7", "Both", "Two-shot · DJI + mics", "30 s", "Vivienne asks René. Keep his whole personal answer.", { ask: "What does it mean to you to visit Georgia Tech after studying here?", g: "key" })
+        ]),
+        B("Concert night", [
+          S("atl-8", "DJI", "Exterior", "5–8 s", "Venue approach and evening city atmosphere, where permitted."),
+          S("atl-9", "iPhone", "Vertical candid", "5–10 s", "Pre-show anticipation and post-show crowd. Follow venue restrictions."),
+          S("atl-10", "iPhone", "Two-shot", "15–25 s", "Straight after the show.", { ask: "What was your favourite moment, and how does Atlanta’s music culture feel in person?", g: "key" })
+        ])
+      ],
+      alt: [{ k: "Reflect", q: "What’s the link between education, identity and opportunity?" }],
+      watch: [
+        "At the MLK sites: steady wides, no decorative treatment of the history.",
+        "No show footage or audio without permission. Film reactions instead.",
+        "Check the ticket for billing and venue before anything goes on screen."
+      ]
+    },
+    {
+      date: "2026-11-06", city: "ATL·NYC", ch: ["CH04", "CH05"], title: "Friends, then New York", route: "Atlanta → JFK → Chelsea",
+      note: "Protect friend time and travel buffers.",
+      tz: "Atlanta and New York -05:00", sessions: ["ch04-departure", "ch05-new-york"],
+      sched: [
+        R("Day", "Friend time; gym or driving range optional", "planned"),
+        R("5:53 pm", "Flight ATL → New York JFK, lands 8:24 pm", "booked"),
+        R("Night", "First New York pizza", "planned")
+      ],
+      blocks: [
+        B("Atlanta farewell", [
+          S("atl-11", "iPhone", "Candid", "5 s", "Coffee and friend time, only with their consent.", { g: "priv" }),
+          S("atl-12", "Both", "Two-shot", "15 s", "Atlanta farewell."),
+          S("atl-13", "iPhone", "Detail", "5 s", "Airport and flight transition.")
+        ]),
+        B("New York arrival", [
+          S("nyc-1", "iPhone", "Details", "5 s", "JFK, luggage and the first pizza."),
+          S("nyc-2", "DJI", "Exterior", "5 s", "A quick Chelsea exterior, if convenient.", { g: "opt" }),
+          S("nyc-3", "iPhone", "Selfie", "10 s", "Honest first impression of New York.")
+        ])
+      ],
+      watch: ["Friend time stays private unless your friends are happy to be filmed.", "Don’t add entertainment commitments for coverage."]
+    },
+    {
+      date: "2026-11-07", city: "NYC", ch: ["CH05"], title: "Hip-hop, skyline and Broadway", route: "Harlem & Bronx tour → Top of the Rock → Broadway",
+      note: "A tightly booked day. Hip-hop history, skyline, theatre and creative energy.",
+      tz: "New York -05:00", sessions: ["ch05-new-york"],
+      sched: [
+        R("10 am–1:30 pm", "Harlem and Bronx hip-hop tour", "booked", "Operator per the 13 Oct itinerary: Hush. Check the ticket."),
+        R("4:00 pm", "Top of the Rock", "booked"),
+        R("7:30 pm", "Broadway show", "booked", "Check the show and theatre on the ticket."),
+        R("After the show", "Brief Times Square walk", "planned"),
+        R("Late", "The Rum House (jazz)", "planned", "Planned, not booked."),
+        R("If time", "SoHo", "optional")
+      ],
+      blocks: [
+        B("Hip-hop tour", [
+          S("nyc-4", "DJI", "Wide", "5–8 s", "Neighbourhood establishing shots and tour locations, where permitted."),
+          S("nyc-5", "iPhone", "Details", "5 s", "Tour textures, signage and permitted details."),
+          S("nyc-6", "Both", "Two-shot", "20 s", "After the tour.", { ask: "What surprised you about the history of hip-hop?" })
+        ]),
+        B("Top of the Rock · 4 pm", [
+          S("nyc-7", "DJI", "Wide · locked off", "8 s", "The skyline hero shot. Give the view room to breathe."),
+          S("nyc-8", "Both", "Two-shot", "15–20 s", "The skyline exchange.", { ask: "How does New York compare with Sydney and the other US cities?" })
+        ]),
+        B("Broadway and night", [
+          S("nyc-9", "iPhone", "Vertical", "5–10 s", "Theatre exterior and pre- and post-show reactions. Never record the performance."),
+          S("nyc-10", "DJI", "Tracking medium", "5–8 s", "Times Square, only if timing permits. Don’t block pedestrians.", { g: "opt" }),
+          S("nyc-11", "iPhone", "Atmosphere", "5 s", "The Rum House exterior or atmosphere, only if you go and filming is allowed.", { g: "opt" })
+        ])
+      ],
+      alt: [{ k: "Ask", q: "How does New York’s creative energy relate to technology?" }],
+      watch: ["Protect each booked start time; don’t overfill the day.", "No recording the Broadway performance.", "Check the tour operator and show name on the tickets before any caption."]
+    },
+    {
+      date: "2026-11-08", city: "NYC·DC", ch: ["CH05", "CH06"], title: "Train to DC, monuments at night", route: "Chelsea → Amtrak → Washington → Monuments by Night",
+      note: "A short, transit-heavy stop. Don’t manufacture interviews or overfill it.",
+      tz: "New York and Washington -05:00", sessions: ["ch05-departure", "ch06-washington-dc"],
+      sched: [
+        R("Morning", "New York breakfast", "planned"),
+        R("1:17 pm", "Amtrak New York → Washington, arrives 4:45 pm", "booked"),
+        R("~5:45 pm", "Unconventional Diner", "selected"),
+        R("7:10–7:15 pm", "Meet at the US Navy Memorial Plaza", "booked"),
+        R("7:30–10:30 pm", "Monuments by Night tour", "booked")
+      ],
+      blocks: [
+        B("Leaving New York", [
+          S("nyc-12", "iPhone", "Details", "5 s", "Chelsea morning coffee and packing."),
+          S("nyc-13", "Both", "Two-shot", "15 s", "Goodbye to New York.", { ask: "What was your most memorable experience in New York?" }),
+          S("nyc-14", "DJI", "Exterior", "5 s", "Station exterior, where permitted."),
+          S("nyc-15", "iPhone", "Window", "5 s", "Train-window transition to DC.")
+        ]),
+        B("Arrive in DC", [
+          S("DC01", "iPhone", "Window", "5 s", "Train window and station arrival. No tickets or passenger details."),
+          S("DC02", "DJI", "Wide", "5–8 s", "Station exterior or first DC view, only if convenient.", { g: "opt" }),
+          S("DC03", "iPhone", "Details", "5 s", "Hotel check-in and quick dinner details. Protect the 7:30 pm tour start.")
+        ]),
+        B("Monuments by night", [
+          S("DC04", "DJI", "Wide · locked off", "5–8 s each", "Illuminated monuments where the tour permits filming. Stabilise and expose for the highlights."),
+          S("DC05", "iPhone", "Candid", "5 s", "A reaction to the scale. No bright lights that disturb other visitors."),
+          S("DC06", "Both", "Two-shot", "15–20 s", "After the tour, away from the group if practical.", { ask: "What surprised you most about seeing Washington at night?" })
+        ])
+      ],
+      watch: ["Don’t miss the 7:10–7:15 pm meeting time.", "Don’t delay the group or give up sleep for a shot.", "Keep train tickets and personal data out of frame."]
+    },
+    {
+      date: "2026-11-09", city: "DC·MIA", ch: ["CH06", "CH07"], title: "The Capitol, then Miami", route: "Capitol → DCA → Miami Beach",
+      note: "Tonight is MAX prep: charge every battery, clear cards, test mics, confirm Adobe slots, badges and approval contacts.",
+      tz: "Washington and Miami -05:00", sessions: ["ch06-washington-dc", "ch07-independent-roadshow"],
+      sched: [
+        R("9–10:30 am", "CSET / Georgetown research conversation", "pending"),
+        R("Late morning", "Capitol exterior, brief stop; Supreme Court exteriors if feasible", "planned"),
+        R("2:39 pm", "Flight DCA → Miami, lands 5:33 pm (Adobe-arranged)", "booked"),
+        R("Evening", "Adobe MAX prep", "planned")
+      ],
+      blocks: [
+        B("Capitol", [
+          S("DC07", "DJI", "Wide", "5–8 s", "Capitol exterior from a public vantage point where filming is permitted."),
+          S("DC08", "Both", "Two-shot", "15–25 s", "A genuine host question. Don’t present it as expert testimony.", { ask: "We’ve explored technology, culture and history. What questions about policy and AI governance are you taking away from DC?" }),
+          S("DC09", "DJI", "Two-shot · mics", "as agreed", "The research conversation, only if it’s actually confirmed. Stable eye-level shot, permission and a short introduction.", { g: "cond" })
+        ]),
+        B("To Miami", [
+          S("DC10", "iPhone", "Details", "5 s", "Packing, DCA exterior, departure."),
+          S("DC11", "iPhone", "Selfie", "10 s", "Keep independent narration separate from the Adobe work.", { say: "Next stop Miami, where we cover Adobe MAX." }),
+          S("MIA01", "iPhone", "Window", "5 s", "Plane window and arrival signage. No boarding passes."),
+          S("MIA02", "DJI", "Wide", "5–8 s", "Miami Beach exterior in the evening, only if time and energy allow.", { g: "opt" }),
+          S("MIA03", "Both", "Two-shot", "10–15 s", "DJI horizontal master, optional iPhone vertical.", { say: "We’ve made it to Miami. Tomorrow we’re covering Adobe MAX." })
+        ])
+      ],
+      alt: [{ k: "Ask", q: "What role should government play in shaping AI adoption?" }],
+      watch: [
+        "The CSET conversation is pending: film it only if it happens, with consent. No Reston detour.",
+        "Protect the airport buffer.",
+        "Tonight: charge batteries, clear cards, test mics, confirm Adobe slots, badges and approval contacts."
+      ]
+    },
+    {
+      date: "2026-11-10", city: "MIA", ch: ["CH07", "ADOBE"], adobe: true, title: "Adobe MAX Day 1", route: "Miami Beach Convention Center",
+      note: "Everything filmed at MAX belongs to the Adobe-sponsored lane first. The independent Miami chapter may reuse MIA04–07 and MIA10 only on Adobe’s terms.",
+      tz: "Miami -05:00", sessions: ["ch07-adobe-max-day1", "ch07-interviews"],
+      sched: [
+        R("All day", "Adobe MAX Day 1 (paid editorial work)", "booked"),
+        R("TBC", "Curated conversation slots", "pending", "Up to three across both days. None is fixed yet.")
+      ],
+      blocks: [
+        B("Arrival and stand-up", [
+          S("MIA04", "DJI", "Wide", "5–8 s", "Convention center exterior and MAX signage, under the event’s filming rules.", { g: "adobe" }),
+          S("MIA05", "iPhone", "Close", "5 s", "Credentials and attendee arrival. Hide barcodes and private details.", { g: "adobe" }),
+          S("MIA07", "Both", "Stand-up", "20–30 s", "Opening stand-up. DJI horizontal; iPhone vertical if practical.", { say: "We’re at Adobe MAX in Miami, exploring how creative technology and AI are changing the way people make things.", g: "adobe" })
+        ]),
+        B("Expo, demos and keynote", [
+          S("MIA06", "DJI", "Wide / medium", "5–8 s each", "Approved expo floor, demos, keynote atmosphere and people interacting. No embargoed screens.", { g: "adobe" }),
+          S("MIA10", "iPhone", "Details", "5 s each", "Product demos, creators at work, hands-on details, where filming is permitted.", { g: "adobe" })
+        ]),
+        B("Curated conversations", [
+          S("MIA08", "DJI", "Interview master", "15–30 min slot", "Conversation 1, if scheduled. Stable eye-level master, mics on both speakers, room tone and B-roll.", { g: "adobe cond" }),
+          S("MIA09", "DJI", "Interview master", "slot", "Conversation 2, only if scheduled and approved. Don’t sacrifice core event coverage.", { g: "adobe cond" })
+        ]),
+        B("Wrap", [
+          S("MIA11", "Both", "Two-shot", "20 s", "End-of-day recap: your strongest insight and one question for tomorrow.", { g: "adobe" })
+        ])
+      ],
+      alt: [
+        { k: "Interview", q: "What creative workflow is changing fastest?" },
+        { k: "Interview", q: "What does AI make possible that wasn’t practical before?" },
+        { k: "Interview", q: "What should teams understand about responsible adoption?" }
+      ],
+      watch: [
+        "Adobe’s review, embargo, attribution and usage rules apply before anything is published.",
+        "No embargoed screens; hide badge details.",
+        "Before an interview: name, title, product claims, recording permission, Adobe’s approval path, any embargo.",
+        "Tailor the interview questions to the actual guest."
+      ]
+    },
+    {
+      date: "2026-11-11", city: "MIA", ch: ["CH07", "ADOBE"], adobe: true, title: "Adobe MAX Day 2", route: "Miami Beach Convention Center",
+      note: "Aim for enough for one hero story, two daily recap shorts and two hero-derived shorts, plus accurate names, titles, quotes and demo notes for the article.",
+      tz: "Miami -05:00", sessions: ["ch07-adobe-max-day2", "ch07-interviews"],
+      sched: [
+        R("All day", "Adobe MAX Day 2", "booked"),
+        R("TBC", "Curated conversation 3", "pending")
+      ],
+      blocks: [
+        B("MAX Day 2", [
+          S("MIA12", "DJI", "Wide", "5 s", "Fresh signage and atmosphere. Avoid repeating Day 1.", { g: "adobe" }),
+          S("MIA14", "DJI", "Medium", "5–8 s", "Distinctive creative-workflow demos and attendee engagement, where permitted.", { g: "adobe" }),
+          S("MIA13", "DJI", "Interview master", "slot", "Conversation 3, if confirmed, with permission and the release and approval process.", { g: "adobe cond" }),
+          S("MIA15", "Both", "Two-shot", "20–30 s", "Host reflection.", { ask: "What surprised us most about where creative AI is heading?", g: "adobe" }),
+          S("MIA16", "iPhone", "Details", "5 s", "Behind the scenes: wrap, pack-down, leaving the venue.", { g: "adobe" })
+        ])
+      ],
+      watch: ["Same sponsored-lane rules as Day 1.", "Don’t imply all three interviews were booked.", "The article must come from verified conversations and observations."]
+    },
+    {
+      date: "2026-11-12", city: "MIA·SF", ch: ["CH07", "CH08"], title: "Little Havana, fly to San Francisco", route: "Little Havana → MIA → SFO",
+      note: "A short Miami culture morning before the flight.",
+      tz: "Miami -05:00, then San Francisco -08:00", sessions: ["ch07-independent-roadshow", "ch08-san-francisco"],
+      sched: [
+        R("Morning", "Hotel gym or wellness", "optional"),
+        R("Lunch", "Little Havana, seated Cuban lunch", "priority"),
+        R("7:20 pm", "Flight MIA → San Francisco, lands 10:47 pm", "booked")
+      ],
+      blocks: [
+        B("Little Havana", [
+          S("MIA17", "iPhone", "Detail", "5 s", "Miami morning: café or street detail."),
+          S("MIA18", "DJI", "Wide", "5–8 s", "Little Havana street establishing shot. Respect residents and businesses."),
+          S("MIA19", "iPhone", "Close", "5 s", "Cuban coffee, the lunch and an authentic reaction."),
+          S("MIA20", "Both", "Two-shot", "15–20 s", "The independent Miami recap.", { ask: "What did Miami teach us about creativity and technology?" })
+        ]),
+        B("To San Francisco", [
+          S("MIA21", "iPhone", "Details", "5 s", "Packing, airport transfer, flight transition."),
+          S("SF01", "iPhone", "Details", "5 s", "Airport arrival sign, luggage, night drive. Hide travel documents."),
+          S("SF02", "iPhone", "Selfie", "10 s", "Keep it spontaneous. No pressure to shoot at midnight.", { say: "We’ve made it to San Francisco. After Adobe MAX, this part of the trip is more personal.", g: "opt" })
+        ])
+      ],
+      watch: ["Protect the return to the hotel for luggage, and the airport buffer.", "Wellness is optional and private.", "No midnight shoot after landing."]
+    },
+    {
+      date: "2026-11-13", city: "SF", ch: ["CH08"], title: "Golden Gate and the wedding welcome", route: "Palace of Fine Arts → Golden Gate → wedding welcome",
+      note: "The 5 pm wedding welcome is the priority. Bay Area travel takes longer than you expect.",
+      tz: "San Francisco -08:00", sessions: ["ch08-san-francisco"], wedding: true,
+      sched: [
+        R("TBC", "Meta Menlo Park visit", "pending"),
+        R("Afternoon", "Palace of Fine Arts and Golden Gate south viewpoints", "planned"),
+        R("From 5 pm", "Wedding welcome", "private"),
+        R("Evening", "Hotel wellness", "optional")
+      ],
+      blocks: [
+        B("City and the Golden Gate", [
+          S("SF03", "DJI", "Wide", "5–8 s", "A neighbourhood or waterfront establishing shot, if time permits.", { g: "opt" }),
+          S("SF04", "DJI", "Wide, then detail", "5–8 s", "Golden Gate Bridge from a safe public vantage point: a steady wide, then one tighter detail."),
+          S("SF05", "Both", "Two-shot", "15–20 s", "DJI horizontal, optional iPhone vertical.", { ask: "We’ve visited very different tech communities. What feels distinctive about being in the Bay Area?" }),
+          S("SF06", "DJI", "Wide", "5–8 s", "Palace of Fine Arts architecture, respectful of other visitors.")
+        ]),
+        B("Meta, only if confirmed", [
+          S("SF07", "iPhone", "Exterior", "5 s", "Exterior arrival and a personal takeaway, only with your host’s permission. Never inside the offices.", { g: "cond" }),
+          S("SF08", "Both", "Two-shot", "15–20 s", "One takeaway, with nothing confidential. Skip it if the visit doesn’t happen.", { g: "cond" })
+        ]),
+        B("Wedding welcome · private", [
+          S("SF09", "iPhone", "Atmosphere", "5 s", "Welcome atmosphere, only with the couple’s permission. Never film guests who don’t consent.", { g: "priv opt" }),
+          S("SF10", "iPhone", "Selfie", "10 s", "A private end-of-day reaction, away from guests, if you have the energy.", { g: "priv" })
+        ])
+      ],
+      alt: [{ k: "Ask", q: "What surprised you most about the Bay Area?" }],
+      watch: ["Meta is pending: no implied office access or interview.", "Keep wedding footage out of the project until the couple’s permission is recorded."]
+    },
+    {
+      date: "2026-11-14", city: "SF", ch: ["CH08"], title: "Wedding day", route: "Cable car morning → wedding",
+      note: "The wedding takes precedence over content. The documentary doesn’t need wedding footage to tell the story.",
+      tz: "San Francisco -08:00", sessions: ["ch08-san-francisco"], wedding: true,
+      sched: [
+        R("Morning", "Powell–Hyde cable car, Lombard Street, Ghirardelli Square", "planned"),
+        R("Morning", "Gym or wellness", "optional"),
+        R("3:30 pm", "Wedding", "private")
+      ],
+      blocks: [
+        B("Morning in the city", [
+          S("sf-1", "DJI", "Wide", "5–8 s", "A public cable-car establishing shot.", { g: "opt" }),
+          S("SF11", "iPhone", "Detail", "5 s", "Morning coffee or a getting-ready detail.", { g: "opt" })
+        ]),
+        B("Wedding · private", [
+          S("SF12", "iPhone", "Selfie", "10 s", "A private personal reflection, only if you’re comfortable.", { say: "One of the reasons this trip came together was being here for our friends.", g: "priv" }),
+          S("SF13", "iPhone", "Exterior or group", "short", "Venue exterior, or a tasteful group photo or video with the couple’s explicit permission.", { g: "priv opt" }),
+          S("SF14", "iPhone", "Selfie", "short", "A post-event personal reaction, recorded privately. No speeches, ceremony or music.", { g: "priv opt" })
+        ])
+      ],
+      watch: ["Put the cameras away during meaningful moments.", "The couple’s wishes, the guests’ privacy and the official photographer come first."]
+    },
+    {
+      date: "2026-11-15", city: "COAST", ch: ["CH08", "CH09"], title: "The coast road to Shell Beach", route: "San Francisco → Highway 1 (if open) → Shell Beach",
+      note: "The SF15–SF20 and COAST01–06 lists describe the same drive, so they’re merged here. COAST04 answers shot 15 from Sydney.",
+      tz: "California -08:00", sessions: ["ch09-coast-return"],
+      sched: [
+        R("Morning", "Hertz one-way rental pickup", "booked"),
+        R("Day", "Highway 1 and Big Sur, only if the road is open and safe", "optional", "Check Caltrans closures and the weather first. The inland route is a fine fallback."),
+        R("If time", "Monterey, Point Lobos, Bixby Creek Bridge", "optional"),
+        R("Evening", "Overnight in Shell Beach", "booked")
+      ],
+      blocks: [
+        B("Pick up and set off", [
+          S("COAST01", "iPhone", "Details", "5 s", "Rental pickup and packed luggage. Hide rental documents and plates.", { also: "Also covers SF15." })
+        ]),
+        B("On the coast · safe stops only", [
+          S("COAST02", "DJI", "Wide · stationary", "5–8 s", "A coastal panorama from a legal, safe pull-off.", { also: "Also covers SF16." }),
+          S("COAST03", "iPhone", "Details", "5 s each", "Coffee stop, roadside sign, ocean detail. Passenger only; never the driver.", { also: "Also covers SF17." }),
+          S("SF18", "Both", "Two-shot", "15–20 s", "At a safe stop.", { ask: "We’ve gone from conferences to cities to the California coast. What has surprised you most on this trip?" }),
+          S("COAST04", "Both", "Two-shot · DJI + mics", "20–30 s", "The prediction callback. Refer back to what each of you said at Sydney Airport. If those weren’t recorded, ask what you remember and label it as looking back.", { ask: "Before we left Sydney, what did you predict would surprise you most about America? Were you right?", g: "key" })
+        ]),
+        B("Shell Beach", [
+          S("COAST05", "DJI", "Wide", "5–8 s", "Shell Beach arrival, cliffs or sunset, if timing and conditions allow.", { also: "Also covers SF19." }),
+          S("COAST06", "iPhone", "Selfie", "10 s", "A quiet evening reflection.", { say: "Tomorrow we head home.", also: "Also covers SF20." })
+        ])
+      ],
+      watch: ["No filming by the driver. DJI only at legal, safe stops.", "Avoid exhausting or night-time coastal driving.", "Label locations truthfully if you take the inland route."]
+    },
+    {
+      date: "2026-11-16", city: "COAST·LAX", ch: ["CH09"], title: "Last day: Santa Barbara to LAX", route: "Shell Beach → Santa Barbara → Camarillo → LAX",
+      note: "Close the loop. What did you actually learn, and what will you bring back to WTT?",
+      tz: "California -08:00", sessions: ["ch09-coast-return"],
+      sched: [
+        R("Morning", "Leave Shell Beach", "planned"),
+        R("If time", "Santa Barbara stop", "optional"),
+        R("About 3 hours", "Camarillo Premium Outlets", "priority", "The trip review makes this the day’s priority."),
+        R("6:30 pm", "Hertz return target", "booked"),
+        R("10:40 pm", "Flight LAX → Sydney", "booked")
+      ],
+      blocks: [
+        B("Morning", [
+          S("COAST07", "DJI", "Wide", "5–8 s", "Morning ocean, only if it doesn’t delay departure.", { g: "opt" }),
+          S("COAST08", "iPhone", "Details", "5 s", "Breakfast and bags into the car.")
+        ]),
+        B("Santa Barbara and Camarillo", [
+          S("COAST09", "DJI", "Wide · stationary", "5–8 s", "Santa Barbara streets, waterfront or architecture, schedule permitting.", { g: "opt" }),
+          S("COAST10", "iPhone", "Detail", "5 s", "A brief food or coffee stop."),
+          S("COAST11", "iPhone", "Detail", "5 s", "Camarillo sign or a quick shopping moment, only if time permits.", { g: "opt" })
+        ]),
+        B("The final conversation", [
+          S("COAST12", "Both", "Two-shot · DJI + mics", "30–60 s", "The final two-host conversation, at a quiet, safe stop well before LAX. Allow genuine disagreement and humour. No memorised speeches.", { ask: "What surprised you most? What do we want to bring back to What The Tech in Australia?", g: "key" })
+        ]),
+        B("LAX", [
+          S("COAST13", "iPhone", "Details", "5 s", "Rental return and airport wayfinding. Protect the 6:30 pm target."),
+          S("COAST14", "iPhone", "Selfie", "10 s", "Airport sign, gate, final sign-off. No boarding-pass codes.", { say: "That’s a wrap on our US Roadshow. See you back in Australia." }),
+          S("COAST15", "iPhone", "Window", "5 s", "Flight window or a quiet cabin detail, where permitted.", { g: "opt" })
+        ])
+      ],
+      alt: [
+        { k: "Final", q: "What did we learn about the people building technology?" },
+        { k: "Final", q: "Which conversation or place will stay with you?" }
+      ],
+      watch: ["Film the final conversation well before airport pressure.", "Allow generous time for fuel, traffic and the 6:30 pm car return.", "Don’t let shopping eat the airport buffer."]
+    }
+  ];
+
+  const STATUS = {
+    booked: ["Booked", "st-ok"], priority: ["Priority", "st-hi"], planned: ["Planned", "st-plain"], pending: ["Pending", "st-warn"],
+    optional: ["Optional", "st-opt"], selected: ["Not reserved", "st-warn"], private: ["Private", "st-priv"], note: ["Note", "st-spon"]
+  };
+  const TAGS = { key: "Must get", opt: "Optional", cond: "If it happens", priv: "Private", adobe: "Adobe lane" };
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const DOWS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  // ---------- Helpers ----------
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const parts = (iso) => { const [y, m, d] = iso.split("-").map(Number); return { y, m, d, dow: new Date(Date.UTC(y, m - 1, d)).getUTCDay() }; };
+  const token = (iso) => { const p = parts(iso); return MONTHS[p.m - 1].slice(0, 3).toLowerCase() + p.d; };
+  const localISO = (dt) => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+  const sydneyISO = () => { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Australia/Sydney", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); } catch { return null; } };
+  const daysBetween = (a, b) => { const pa = parts(a), pb = parts(b); return Math.round((Date.UTC(pb.y, pb.m - 1, pb.d) - Date.UTC(pa.y, pa.m - 1, pa.d)) / 864e5); };
+  const isCore = (s) => !s.g.includes("opt") && !s.g.includes("cond");
+  const allShots = (day) => day.blocks.flatMap((b) => b.shots);
+  const store = {
+    get(k, fallback) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fallback; } catch { return fallback; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* storage unavailable: keep going */ } }
+  };
+
+  // ---------- State ----------
+  const prefs = Object.assign({ cam: "all", showOpt: true }, store.get("wtt-shotlist-prefs", {}));
+  let done = new Set(store.get("wtt-shotlist-local", []));
+  let sync = "local";       // local | shared | readonly | error
+  let canWrite = true;
+  let db = null;
+  const pending = new Set();
+
+  const today = localISO(new Date());
+  let banner = "";
+  let idx = DAYS.findIndex((d) => d.date === today);
+  if (idx === -1) {
+    if (today < DAYS[0].date) {
+      idx = 0;
+      const n = daysBetween(today, DAYS[0].date);
+      banner = `The shoot starts on Thursday 29 October, ${n === 1 ? "tomorrow" : `in ${n} days`}. Showing day 1.`;
+    } else {
+      idx = DAYS.length - 1;
+      banner = "The roadshow is over. Showing the last day.";
+    }
+  }
+  const fromHash = DAYS.findIndex((d) => token(d.date) === location.hash.slice(1));
+  if (fromHash !== -1) { idx = fromHash; banner = ""; }
+
+  // ---------- Rendering ----------
+  function dayProgress(day) {
+    const core = allShots(day).filter(isCore);
+    return { got: core.filter((s) => done.has(s.c)).length, total: core.length };
+  }
+
+  function renderStrip() {
+    const strip = $("strip");
+    strip.innerHTML = DAYS.map((d, i) => {
+      const p = parts(d.date), pr = dayProgress(d);
+      const pct = pr.total ? Math.round((pr.got / pr.total) * 100) : 0;
+      const cls = ["chip-day", d.date === today ? "is-today" : "", p.d === 1 ? "month-start" : ""].join(" ");
+      return `<button class="${cls}" data-i="${i}" aria-current="${i === idx}" aria-label="${DOWS[p.dow]} ${p.d} ${MONTHS[p.m - 1]}, ${esc(d.city)}">
+        <span class="dow">${DOWS[p.dow].slice(0, 3)}</span><span class="dn">${p.d}</span><span class="city">${esc(d.city)}</span>
+        <span class="bar"><i style="width:${pct}%"></i></span></button>`;
+    }).join("");
+  }
+
+  function shotHTML(s, day) {
+    const isDone = done.has(s.c);
+    const tags = s.g.map((t) => `<span class="tag tag-${t}">${TAGS[t]}</span>`).join("");
+    const line = s.ask ? `<p class="line"><span class="k">Ask</span>${esc(s.ask)}</p>` : s.say ? `<p class="line"><span class="k">Say</span>${esc(s.say)}</p>` : "";
+    return `<li class="shot${isDone ? " is-done" : ""}">
+      <button class="tick" data-key="${esc(s.c)}" data-day="${day.date}" aria-pressed="${isDone}" aria-label="${isDone ? "Captured" : "Mark captured"}: ${esc(s.c)}"${canWrite ? "" : " disabled"}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="shot-body">
+        <div class="meta"><span class="code${s.lbl ? " lbl" : ""}">${esc(s.c)}</span><span class="cam cam-${s.cam}">${s.cam}</span><span class="frame">${esc(s.f)} · ${esc(s.d)}</span>${tags}</div>
+        <p class="shot-text">${esc(s.t)}</p>${line}${s.also ? `<p class="also">${esc(s.also)}</p>` : ""}
+      </div></li>`;
+  }
+
+  function renderDay() {
+    const day = DAYS[idx], p = parts(day.date), pr = dayProgress(day);
+    const opt = allShots(day).length - pr.total;
+    const pct = pr.total ? Math.round((pr.got / pr.total) * 100) : 0;
+    const chapters = day.ch.map((c) => c === "ADOBE" ? `<span class="lane">${CH[c]}</span>` : `<span>${c} ${CH[c]}</span>`).join("");
+    const prev = DAYS[idx - 1], next = DAYS[idx + 1];
+    const navLabel = (d) => { const q = parts(d.date); return `${DOWS[q.dow].slice(0, 3)} ${q.d} · ${d.city}`; };
+
+    const sched = day.sched.map((r) => {
+      const [label, cls] = STATUS[r.s];
+      return `<li><span class="t">${esc(r.t)}</span><div class="w"><p>${esc(r.w)}<span class="status ${cls}">${label}</span></p>${r.sub ? `<p class="sub">${esc(r.sub)}</p>` : ""}</div></li>`;
+    }).join("");
+
+    const asks = [
+      ...allShots(day).filter((s) => s.ask || s.say).map((s) => ({ k: `${s.c} · ${s.ask ? "Ask" : "Say"}`, q: s.ask || s.say })),
+      ...(day.alt || []).map((a) => ({ k: a.k, q: a.q }))
+    ];
+
+    const visible = (s) => (prefs.cam === "all" || s.cam === prefs.cam) && (prefs.showOpt || isCore(s));
+    const blocks = day.blocks.map((b) => {
+      const shots = b.shots.filter(visible);
+      if (!shots.length) return "";
+      const got = b.shots.filter((s) => done.has(s.c)).length;
+      return `<div class="block"><h3>${esc(b.name)}<span class="n">${got}/${b.shots.length}</span></h3><ul class="shots">${shots.map((s) => shotHTML(s, day)).join("")}</ul></div>`;
+    }).join("") || `<p class="empty">No shots match these filters today.</p>`;
+
+    const syd = sydneyISO();
+    const sessions = day.sessions.map((s) => `<span class="mono">${esc(s)}</span>`).join(", ");
+
+    $("day").innerHTML = `
+      ${banner ? `<div class="banner">${esc(banner)}</div>` : ""}
+      <section class="day-head" aria-labelledby="day-h">
+        <div class="eyebrow"><span>Day ${idx + 1} of ${DAYS.length}</span>${chapters}</div>
+        <div class="title-row"><h1 id="day-h">${DOWS[p.dow]} ${p.d} ${MONTHS[p.m - 1]}</h1>${day.date === today ? `<span class="today-tag">TODAY</span>` : ""}</div>
+        <p class="day-title">${esc(day.title)}</p>
+        <p class="day-note">${esc(day.route)}. ${esc(day.note)}</p>
+        <div class="progress">
+          <div class="progress-track" aria-hidden="true"><i style="width:${pct}%"></i></div>
+          <span class="progress-text"><b>${pr.got} of ${pr.total}</b> core shots captured${opt ? ` · ${opt} optional or conditional` : ""}</span>
+        </div>
+        <div class="daynav">
+          <button class="btn-ghost" data-go="${idx - 1}" ${prev ? "" : "disabled"}>‹ ${prev ? navLabel(prev) : ""}</button>
+          <button class="btn-ghost" data-go="${idx + 1}" ${next ? "" : "disabled"}>${next ? navLabel(next) : ""} ›</button>
+        </div>
+      </section>
+
+      <div class="two-col">
+        <section aria-labelledby="sched-h"><h2 id="sched-h">Schedule <small>local time</small></h2><ul class="sched">${sched}</ul></section>
+        <section aria-labelledby="ask-h"><h2 id="ask-h">On camera <small>${asks.length} prompts</small></h2>
+          ${asks.length ? `<ul class="asks">${asks.map((a) => `<li><span class="k">${esc(a.k)}</span><q>${esc(a.q)}</q></li>`).join("")}</ul>` : `<p class="empty">No set lines today. Use the morning and evening prompts.</p>`}
+        </section>
+      </div>
+
+      <section aria-labelledby="watch-h"><h2 id="watch-h">Watch out</h2><ul class="watch">${day.watch.map((w) => `<li>${esc(w)}</li>`).join("")}</ul></section>
+
+      <section aria-labelledby="shots-h">
+        <h2 id="shots-h">Shots <small>${allShots(day).length} planned</small></h2>
+        <div class="filters">
+          <div class="seg" role="group" aria-label="Camera">
+            ${["all", "DJI", "iPhone", "Both"].map((c) => `<button data-cam="${c}" aria-pressed="${prefs.cam === c}">${c === "all" ? "All" : c}</button>`).join("")}
+          </div>
+          <label class="switch" for="show-opt"><input type="checkbox" id="show-opt" ${prefs.showOpt ? "checked" : ""}> Show optional shots</label>
+        </div>
+        <div style="margin-top:14px">${blocks}</div>
+      </section>
+
+      <section aria-labelledby="off-h">
+        <h2 id="off-h">Tonight’s offload</h2>
+        <div class="offload">
+          <dl class="kv">
+            <dt>Sessions</dt><dd>${sessions}</dd>
+            <dt>Camera clock</dt><dd>${esc(day.tz)} <span class="frame">(for <span class="mono">--recorded-at</span> on non-iPhone files)</span></dd>
+            <dt>Folder</dt><dd><span class="mono path">media/incoming/${syd || "&lt;Sydney date&gt;"}/${esc(day.sessions[0])}/</span></dd>
+          </dl>
+          <p class="frame">Offload folders use the Sydney date on the day you offload${syd ? `; in Sydney it’s ${syd} right now` : ""}. One subfolder per session. Back up to two other places and check the copies before wiping a card.</p>
+          ${day.wedding ? `<p class="callout priv">Wedding footage never goes into <span class="mono">media/incoming/</span> or anywhere in the project. Store it separately until the couple’s permission is recorded.</p>` : ""}
+          ${day.adobe ? `<p class="callout spon">Sponsored footage goes only into its own <span class="mono">ch07-adobe-*</span> sessions, never mixed with independent footage.</p>` : ""}
+        </div>
+      </section>`;
+  }
+
+  function render() { renderStrip(); renderDay(); }
+
+  function select(i, scroll = true) {
+    if (i < 0 || i >= DAYS.length || i === idx) return;
+    idx = i; banner = "";
+    try { history.replaceState(null, "", "#" + token(DAYS[idx].date)); } catch { /* ignore */ }
+    render();
+    if (scroll) window.scrollTo({ top: 0 });
+    centerChip();
+  }
+
+  function centerChip() {
+    const chip = document.querySelector(`.chip-day[data-i="${idx}"]`), box = $("strip-scroll");
+    if (chip && box) box.scrollLeft = chip.offsetLeft - box.clientWidth / 2 + chip.clientWidth / 2;
+  }
+
+  function setSync(state) {
+    sync = state;
+    const el = $("sync");
+    el.dataset.state = state;
+    el.textContent = { local: "Saved on this phone", connecting: "Connecting…", shared: "Ticks shared", readonly: "View only", error: "Not syncing" }[state];
+  }
+
+  let toastTimer;
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg; el.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 4200);
+  }
+
+  // ---------- Ticks ----------
+  async function toggle(key, dayISO) {
+    if (!canWrite || pending.has(key)) return;
+    const was = done.has(key);
+    was ? done.delete(key) : done.add(key);
+    render();
+    if (!db) { store.set("wtt-shotlist-local", [...done]); return; }
+    pending.add(key);
+    try {
+      const ref = db.collection("shots").doc(key);
+      if (was) await ref.delete(); else await ref.set({ done: true, at: new Date().toISOString(), day: dayISO });
+    } catch (e) {
+      was ? done.add(key) : done.delete(key);
+      if (e && e.code === "invalid_argument") {
+        canWrite = false; setSync("readonly");
+        toast("You can see the ticks but not change them. Ask the page’s owner for Contributor access.");
+      } else {
+        toast("That tick didn’t save. Check your connection and try again.");
+      }
+      render();
+    } finally { pending.delete(key); }
+  }
+
+  async function connect() {
+    const c = window.claude;
+    if (!c || typeof c.use !== "function") return;
+    try { db = await c.use("db"); } catch { db = null; }
+    if (!db) return;
+    setSync("connecting");
+    try {
+      const user = await c.use("user");
+      if (user && (await user.can("data.write")) === false) { canWrite = false; }
+    } catch { /* keep controls; a refused write decides */ }
+    db.collection("shots").onSnapshot((snap) => {
+      done = new Set(snap.docs.filter((d) => d.exists && d.data() && d.data().done).map((d) => d.id));
+      setSync(canWrite ? "shared" : "readonly");
+      render();
+    }, () => { setSync("error"); toast("Ticks stopped syncing. Reload the page to reconnect."); });
+  }
+
+  // ---------- Events ----------
+  $("strip").addEventListener("click", (e) => { const b = e.target.closest(".chip-day"); if (b) select(Number(b.dataset.i)); });
+  $("day").addEventListener("click", (e) => {
+    const tick = e.target.closest(".tick");
+    if (tick) { toggle(tick.dataset.key, tick.dataset.day); return; }
+    const go = e.target.closest("[data-go]");
+    if (go) { select(Number(go.dataset.go)); return; }
+    const cam = e.target.closest("[data-cam]");
+    if (cam) { prefs.cam = cam.dataset.cam; store.set("wtt-shotlist-prefs", prefs); renderDay(); }
+  });
+  $("day").addEventListener("change", (e) => {
+    if (e.target.id === "show-opt") { prefs.showOpt = e.target.checked; store.set("wtt-shotlist-prefs", prefs); renderDay(); }
+  });
+  $("rules-btn").addEventListener("click", () => {
+    const panel = $("rules"), btn = $("rules-btn");
+    panel.hidden = !panel.hidden;
+    btn.setAttribute("aria-expanded", String(!panel.hidden));
+  });
+  window.addEventListener("hashchange", () => {
+    const i = DAYS.findIndex((d) => token(d.date) === location.hash.slice(1));
+    if (i !== -1) select(i);
+  });
+
+  render();
+  requestAnimationFrame(centerChip);
+  connect();
+})();
+</script>
+</body>
+</html>
