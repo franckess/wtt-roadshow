@@ -138,6 +138,17 @@ h2 small { font-family: var(--f-body); font-weight: 400; font-size: .85rem; lett
 .watch { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 66ch; }
 .watch li::marker { color: var(--warn); }
 
+/* Look it up */
+.look { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.look a { display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 6px 13px 6px 11px; border: 1px solid var(--line); border-radius: 99px; background: var(--surface); color: var(--ink); text-decoration: none; font-size: .92rem; }
+.look a:hover { border-color: var(--accent); }
+.look svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--muted); stroke-width: 2.2; }
+.look-form { display: flex; gap: 8px; max-width: 520px; }
+.look-form input { flex: 1; min-width: 0; font: inherit; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+.look-form .btn-ghost { font-size: .9rem; padding-inline: 14px; }
+.look-note { margin: 8px 0 0; }
+.sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
 /* Filters */
 .filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--surface); }
@@ -246,6 +257,7 @@ footer p { margin: 0; max-width: 70ch; }
       <div><h3>Every night</h3><ul>
         <li>Charge the DJI, phones and mic batteries. Clear storage.</li>
         <li>Offload, then back up to two separate places and check the copies before wiping a card.</li>
+        <li>Note every name, title and place you filmed, spelt as on their own page. The edit checks them again before anything goes on screen.</li>
       </ul></div>
     </div>
   </div>
@@ -256,6 +268,7 @@ footer p { margin: 0; max-width: 70ch; }
 <footer>
   <div class="wrap">
     <p>Built from the job’s storyboard (revision sb007) and the source filming storyboard’s shot list, including the 22 October music &amp; sport addendum and itinerary audit. Booking statuses are as the source reports them and haven’t been checked against tickets. Check times on the day.</p>
+    <p>“Look it up” links search Google in a new tab for a place the page already names, or for what you type. They don’t send this page’s address or your ticks.</p>
     <p>Codes such as <span class="mono">LA05</span> come from the source shot list. Lowercase labels such as <span class="mono">atl-3</span> mark shots the source lists without a code. A letter suffix such as <span class="mono">LA16a</span> splits a source shot using the addendum.</p>
   </div>
 </footer>
@@ -865,6 +878,27 @@ footer p { margin: 0; max-width: 70ch; }
     }
   ];
 
+  // "Look it up": Google searches for public places each day already names. Nothing for the
+  // wedding, friends, hotels or pending visits. Links only; the page never fetches anything.
+  const LOOK = {
+    "2026-10-30": ["Getty Center", "Koreatown Los Angeles"],
+    "2026-10-31": ["Griffith Observatory", "Santa Monica Pier", "Venice Beach Boardwalk", "Rare Candy Halloween Highland Park"],
+    "2026-11-02": ["Space Center Houston", "POST Houston", "Houston Rockets Toyota Center"],
+    "2026-11-03": ["AFROTECH 2026", "GRB Convention Center Houston"],
+    "2026-11-04": ["AFROTECH 2026"],
+    "2026-11-05": ["Sweet Auburn Atlanta", "MLK historic sites Atlanta", "Georgia Tech", "Mercedes-Benz Stadium"],
+    "2026-11-07": ["Hush hip-hop tour Harlem Bronx", "Top of the Rock", "The Rum House New York"],
+    "2026-11-08": ["Monuments by Night tour Washington DC", "US Navy Memorial Plaza"],
+    "2026-11-09": ["US Capitol", "Supreme Court Washington DC"],
+    "2026-11-10": ["Adobe MAX 2026", "Miami Beach Convention Center"],
+    "2026-11-11": ["Adobe MAX 2026"],
+    "2026-11-12": ["Little Havana Miami"],
+    "2026-11-13": ["Palace of Fine Arts", "Golden Gate Bridge"],
+    "2026-11-14": ["Powell–Hyde cable car", "Lombard Street", "Ghirardelli Square"],
+    "2026-11-15": ["Caltrans Highway 1 Big Sur closures", "Point Lobos", "Bixby Creek Bridge", "Shell Beach California"],
+    "2026-11-16": ["Santa Barbara", "Camarillo Premium Outlets"]
+  };
+
   const STATUS = {
     booked: ["Booked", "st-ok"], priority: ["Priority", "st-hi"], planned: ["Planned", "st-plain"], pending: ["Pending", "st-warn"],
     optional: ["Optional", "st-opt"], selected: ["Not reserved", "st-warn"], private: ["Private", "st-priv"], note: ["Note", "st-spon"]
@@ -881,6 +915,8 @@ footer p { margin: 0; max-width: 70ch; }
   const localISO = (dt) => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
   const sydneyISO = () => { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Australia/Sydney", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); } catch { return null; } };
   const daysBetween = (a, b) => { const pa = parts(a), pb = parts(b); return Math.round((Date.UTC(pb.y, pb.m - 1, pb.d) - Date.UTC(pa.y, pa.m - 1, pa.d)) / 864e5); };
+  const gsearch = (q) => "https://www.google.com/search?q=" + encodeURIComponent(q);
+  const MAG = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5" stroke-linecap="round"/></svg>`;
   const isCore = (s) => !s.g.includes("opt") && !s.g.includes("cond");
   const allShots = (day) => day.blocks.flatMap((b) => b.shots);
   const store = {
@@ -971,6 +1007,13 @@ footer p { margin: 0; max-width: 70ch; }
 
     const syd = sydneyISO();
     const sessions = day.sessions.map((s) => `<span class="mono">${esc(s)}</span>`).join(", ");
+    const look = (LOOK[day.date] || []).map((q) =>
+      `<li><a href="${esc(gsearch(q))}" target="_blank" rel="noopener noreferrer">${MAG}${esc(q)}<span class="sr"> (Google search, opens in a new tab)</span></a></li>`).join("");
+
+    // Keep a half-typed search across re-renders (a synced tick re-renders the day).
+    const lookInput = $("look-q");
+    const lookValue = lookInput ? lookInput.value : "";
+    const lookFocused = !!lookInput && document.activeElement === lookInput;
 
     $("day").innerHTML = `
       ${banner ? `<div class="banner">${esc(banner)}</div>` : ""}
@@ -998,6 +1041,17 @@ footer p { margin: 0; max-width: 70ch; }
 
       <section aria-labelledby="watch-h"><h2 id="watch-h">Watch out</h2><ul class="watch">${day.watch.map((w) => `<li>${esc(w)}</li>`).join("")}</ul></section>
 
+      <section aria-labelledby="look-h">
+        <h2 id="look-h">Look it up <small>Google, in a new tab</small></h2>
+        ${look ? `<ul class="look">${look}</ul>` : ""}
+        <form class="look-form" id="look-form" role="search">
+          <label class="sr" for="look-q">Search Google for a name, title or term</label>
+          <input id="look-q" type="search" placeholder="Check a name, title or term" autocomplete="off" enterkeyhint="search" maxlength="200">
+          <button class="btn-ghost" type="submit">Search</button>
+        </form>
+        <p class="frame look-note">Check names and titles against the person’s or organiser’s own page before the edit uses them.</p>
+      </section>
+
       <section aria-labelledby="shots-h">
         <h2 id="shots-h">Shots <small>${allShots(day).length} planned</small></h2>
         <div class="filters">
@@ -1022,6 +1076,12 @@ footer p { margin: 0; max-width: 70ch; }
           ${day.adobe ? `<p class="callout spon">Sponsored footage goes only into its own <span class="mono">ch07-adobe-*</span> sessions, never mixed with independent footage.</p>` : ""}
         </div>
       </section>`;
+
+    if (lookValue || lookFocused) {
+      const el = $("look-q");
+      el.value = lookValue;
+      if (lookFocused) el.focus();
+    }
   }
 
   function render() { renderStrip(); renderDay(); }
@@ -1103,6 +1163,12 @@ footer p { margin: 0; max-width: 70ch; }
     if (go) { select(Number(go.dataset.go)); return; }
     const cam = e.target.closest("[data-cam]");
     if (cam) { prefs.cam = cam.dataset.cam; store.set("wtt-shotlist-prefs", prefs); renderDay(); }
+  });
+  $("day").addEventListener("submit", (e) => {
+    if (e.target.id !== "look-form") return;
+    e.preventDefault();
+    const q = $("look-q").value.trim();
+    if (q) window.open(gsearch(q), "_blank", "noopener,noreferrer");
   });
   $("day").addEventListener("change", (e) => {
     if (e.target.id === "show-opt") { prefs.showOpt = e.target.checked; store.set("wtt-shotlist-prefs", prefs); renderDay(); }
