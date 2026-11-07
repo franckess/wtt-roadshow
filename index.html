@@ -589,42 +589,66 @@ footer p { margin: 0; max-width: 70ch; }
       watch: ["Friend time stays private unless your friends are happy to be filmed.", "Don’t add entertainment commitments for coverage."]
     },
     {
-      date: "2026-11-07", city: "NYC", ch: ["CH05"], title: "Hip-hop, skyline and Broadway", route: "Harlem & Bronx tour → Top of the Rock → Broadway",
-      note: "A tightly booked day. Hip-hop history, skyline, theatre and creative energy.",
+      date: "2026-11-07", city: "NYC", ch: ["CH05"], title: "Harlem, Brooklyn Bridge, skyline and Broadway", route: "Chelsea → Harlem → Brooklyn Bridge & DUMBO → Top of the Rock → Broadway",
+      note: "A DIY day: no guided tours, no extra bookings, no museums. Harlem and DUMBO are the heart of it; Chinatown and Little Italy are the flexible part.",
       tz: "New York -05:00", sessions: ["ch05-new-york"],
       sched: [
-        R("10 am–1:30 pm", "Harlem and Bronx hip-hop tour", "booked", "Operator per the 13 Oct itinerary: Hush. Check the ticket."),
-        R("4:00 pm", "Top of the Rock", "booked"),
-        R("7:30 pm", "Broadway show", "booked", "Check the show and theatre on the ticket."),
-        R("After the show", "Brief Times Square walk", "planned"),
-        R("Late", "The Rum House (jazz)", "planned", "Planned, not booked."),
-        R("If time", "SoHo", "optional")
+        R("8:00–8:35 am", "Bagels and coffee, Brooklyn Bagel & Coffee Co.", "planned", "286 8th Avenue, near Motto Chelsea. Opens 7 am."),
+        R("8:35–9:20 am", "Subway to Harlem", "planned", "Check MTA weekend service changes before leaving."),
+        R("9:20–11:10 am", "DIY Harlem hip-hop and basketball trail", "priority", "Rucker Park → Big L / Lamont Coleman Way (W 140th & Malcolm X Blvd) → Planet Harlem mural (W 126th & Malcolm X Blvd) → Apollo Theater. Harlem World (116th) only if ahead of time."),
+        R("11:10 am–noon", "Subway downtown", "planned"),
+        R("Noon–12:30 pm", "Chinatown and Little Italy mini-walk", "optional", "Doyers, Mott and Mulberry Streets. Skip it if Harlem runs long; protect DUMBO instead."),
+        R("12:50–1:40 pm", "Walk Brooklyn Bridge, Manhattan → Brooklyn", "priority", "Start at the pedestrian entrance near City Hall."),
+        R("1:40–2:10 pm", "DUMBO: Washington Street and Pebble Beach", "priority"),
+        R("2:10–2:50 pm", "Lunch and rooftop views, Time Out Market", "planned", "Leave DUMBO by 2:50–3 pm. F train from York Street, subject to weekend service."),
+        R("4:15–5:20 pm", "Top of the Rock", "booked", "Sunset about 4:45 pm. Arrive at Rockefeller Center by 4 pm."),
+        R("5:30–6:45 pm", "Dinner and Midtown: a New York slice", "planned"),
+        R("7:30–9:40 pm", "Buena Vista Social Club, Gerald Schoenfeld Theatre", "booked", "236 W 45th St. Seats E108–E109. Arrive by 7 pm."),
+        R("From 9:45 pm", "Times Square by night, then back to Motto", "planned"),
+        R("Weather", "18°C / 10°C, partly sunny; breezy with a chance of evening showers", "note", "Sneakers, layers and an umbrella for later.")
       ],
       blocks: [
-        B("Hip-hop tour", [
-          S("nyc-4", "DJI", "Wide", "5–8 s", "Neighbourhood establishing shots and tour locations, where permitted."),
-          S("nyc-5", "iPhone", "Details", "5 s", "Tour textures, signage and permitted details."),
-          S("nyc-6", "Both", "Two-shot", "20 s", "After the tour.", { ask: "What surprised you about the history of hip-hop?" })
+        B("Breakfast · Chelsea", [
+          S("nyc-16", "iPhone", "Details", "5 s", "First proper NYC bagel: the order, the cut, the first bite.", { ask: "First New York bagel: verdict?" })
         ]),
-        B("Top of the Rock · 4 pm", [
-          S("nyc-7", "DJI", "Wide · locked off", "8 s", "The skyline hero shot. Give the view room to breathe."),
+        B("Harlem hip-hop trail", [
+          S("nyc-4", "DJI", "Wide", "5–8 s", "Rucker Park court, Apollo marquee and street establishing shots."),
+          S("nyc-5", "iPhone", "Details", "5 s", "Big L / Lamont Coleman Way street sign, Planet Harlem mural, Apollo signage."),
+          S("nyc-6", "Both", "Two-shot", "20 s", "At Rucker Park or outside the Apollo.", { ask: "What does Harlem mean to hip-hop, and to you?" })
+        ]),
+        B("Chinatown & Little Italy · if time", [
+          S("nyc-17", "iPhone", "Details", "5 s", "Doyers Street curve, Mott and Mulberry Street signs.", { g: "opt" })
+        ]),
+        B("Brooklyn Bridge & DUMBO", [
+          S("nyc-18", "DJI", "Tracking medium", "8 s", "Walking the bridge towards Brooklyn. Keep to the pedestrian side, don’t block cyclists."),
+          S("nyc-19", "DJI", "Wide · locked off", "5–8 s", "Washington Street with the Manhattan Bridge framed between the buildings."),
+          S("nyc-20", "Both", "Two-shot", "15–20 s", "Pebble Beach, Manhattan skyline behind you.", { ask: "We just walked from Manhattan to Brooklyn. How did that feel?" })
+        ]),
+        B("Top of the Rock · 4:15 pm", [
+          S("nyc-7", "DJI", "Wide · locked off", "8 s", "The skyline hero shot around the 4:45 pm sunset. Give the view room to breathe."),
           S("nyc-8", "Both", "Two-shot", "15–20 s", "The skyline exchange.", { ask: "How does New York compare with Sydney and the other US cities?" })
         ]),
         B("Broadway and night", [
-          S("nyc-9", "iPhone", "Vertical", "5–10 s", "Theatre exterior and pre- and post-show reactions. Never record the performance."),
-          S("nyc-10", "DJI", "Tracking medium", "5–8 s", "Times Square, only if timing permits. Don’t block pedestrians.", { g: "opt" }),
-          S("nyc-11", "iPhone", "Atmosphere", "5 s", "The Rum House exterior or atmosphere, only if you go and filming is allowed.", { g: "opt" })
+          S("nyc-9", "iPhone", "Vertical", "5–10 s", "Gerald Schoenfeld Theatre exterior and pre- and post-show reactions. Never record the performance."),
+          S("nyc-10", "DJI", "Tracking medium", "5–8 s", "Times Square by night after the show. Don’t block pedestrians.", { g: "opt" })
         ])
       ],
-      alt: [{ k: "Ask", q: "How does New York’s creative energy relate to technology?" }],
-      watch: ["Protect each booked start time; don’t overfill the day.", "No recording the Broadway performance.", "Check the tour operator and show name on the tickets before any caption."]
+      alt: [{ k: "Ask", q: "From Harlem to Broadway, how does New York’s creative energy relate to technology?" }],
+      watch: [
+        "If Harlem runs long, skip Chinatown and Little Italy and go straight to the Brooklyn Bridge.",
+        "Leave DUMBO by 3 pm to protect the 4:15 pm Top of the Rock slot.",
+        "Check MTA weekend service changes; don’t rely on a single subway route.",
+        "No recording the Broadway performance.",
+        "Evening showers possible: keep the DJI dry and an umbrella handy."
+      ]
     },
     {
       date: "2026-11-08", city: "NYC·DC", ch: ["CH05", "CH06"], title: "Train to DC, monuments at night", route: "Chelsea → Amtrak → Washington → Monuments by Night",
       note: "A short, transit-heavy stop. Don’t manufacture interviews or overfill it.",
       tz: "New York and Washington -05:00", sessions: ["ch05-departure", "ch06-washington-dc"],
       sched: [
-        R("Morning", "New York breakfast", "planned"),
+        R("Morning", "Central Park, The Plaza and Fifth Avenue", "planned"),
+        R("~11:30 am", "Collect bags from Motto, then Moynihan Train Hall by noon", "planned"),
         R("1:17 pm", "Amtrak New York → Washington, arrives 4:45 pm", "booked"),
         R("~5:45 pm", "Unconventional Diner", "selected"),
         R("7:10–7:15 pm", "Meet at the US Navy Memorial Plaza", "booked"),
@@ -632,7 +656,7 @@ footer p { margin: 0; max-width: 70ch; }
       ],
       blocks: [
         B("Leaving New York", [
-          S("nyc-12", "iPhone", "Details", "5 s", "Chelsea morning coffee and packing."),
+          S("nyc-12", "iPhone", "Details", "5 s", "Central Park, The Plaza and Fifth Avenue in the morning; then bags from Motto."),
           S("nyc-13", "Both", "Two-shot", "15 s", "Goodbye to New York.", { ask: "What was your most memorable experience in New York?" }),
           S("nyc-14", "DJI", "Exterior", "5 s", "Station exterior, where permitted."),
           S("nyc-15", "iPhone", "Window", "5 s", "Train-window transition to DC.")
@@ -887,8 +911,8 @@ footer p { margin: 0; max-width: 70ch; }
     "2026-11-03": ["AFROTECH 2026", "GRB Convention Center Houston"],
     "2026-11-04": ["AFROTECH 2026"],
     "2026-11-05": ["Sweet Auburn Atlanta", "MLK historic sites Atlanta", "Georgia Tech", "Mercedes-Benz Stadium"],
-    "2026-11-07": ["Hush hip-hop tour Harlem Bronx", "Top of the Rock", "The Rum House New York"],
-    "2026-11-08": ["Monuments by Night tour Washington DC", "US Navy Memorial Plaza"],
+    "2026-11-07": ["Brooklyn Bagel & Coffee Company 286 8th Avenue", "Rucker Park", "Big L Lamont Coleman Way", "Planet Harlem mural", "Apollo Theater", "Brooklyn Bridge", "Time Out Market New York", "Top of the Rock", "Buena Vista Social Club Broadway", "MTA weekend service changes"],
+    "2026-11-08": ["Central Park", "The Plaza Hotel", "Moynihan Train Hall", "Monuments by Night tour Washington DC", "US Navy Memorial Plaza"],
     "2026-11-09": ["US Capitol", "Supreme Court Washington DC"],
     "2026-11-10": ["Adobe MAX 2026", "Miami Beach Convention Center"],
     "2026-11-11": ["Adobe MAX 2026"],
